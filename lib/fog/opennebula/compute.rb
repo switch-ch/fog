@@ -17,7 +17,7 @@ module Fog
       collection  :interfaces
       model       :group
       collection  :groups
-      
+
       request_path 'fog/opennebula/requests/compute'
       request :list_vms
       request :list_groups
@@ -28,6 +28,9 @@ module Fog
       request :vm_resume
       request :vm_stop
       request :template_pool
+      request :vm_disk_snapshot
+      request :vm_shutdown
+      request :image_pool
 
     class Mock
       include Collections

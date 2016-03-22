@@ -108,31 +108,45 @@ Watchers      | #{watchers}
            'Ash Wilson',
            'Benson Kalahar',
            'Brian Hartsock',
+           'bryanl',
+           'Chris Luo',
            'Chris Roberts',
            'Christopher Oliver',
+           'Colin Hebert',
            'Daniel Reichert',
+           'Darren Hague',
            'Decklin Foster',
            'Dylan Egan',
            'Erik Michaels-Ober',
+           'Frederick Cheung',
            'geemus',
            'Henry Addison',
            'James Bence',
+           'Josef Stribny',
            'Kevin Menard',
            'Kevin Olbrich',
            'Kyle Rames',
+           'Ladislav Smola',
            'Lincoln Stoll',
            'Luqman Amjad',
+           'Michael Hale',
            'Michael Zeng',
            'Mike Hagedorn',
            'Mike Pountney',
            'Nat Welch',
            'Nick Osborn',
            'nightshade427',
+           'Oleg Vivtash',
            'Patrick Debois',
            'Paul Thornthwaite',
+           'Paulo Henrique Lopes Ribeiro',
+           'Peter Souter',
+           'Phil Ross',
+           'Rich Daley',
            'Rodrigo Estebanez',
            'Rupak Ganguly',
            'Stepan G. Fedorov',
+           'TerryHowe',
            'Wesley Beary'
          ].include?(committer)
       end
@@ -165,7 +179,7 @@ Watchers      | #{watchers}
       end
 
       def last_release_sha
-        `cat changelog.md | head -2`.split(' ').last
+        `cat CHANGELOG.md | head -2`.split(' ').last
       end
 
       def downloads

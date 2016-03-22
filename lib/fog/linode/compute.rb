@@ -23,18 +23,28 @@ module Fog
       collection :ips
       model :disk
       collection :disks
+      model :node_balancer_flavor
+      collection :node_balancer_flavors
 
       request_path 'fog/linode/requests/compute'
       request :avail_datacenters
       request :avail_distributions
       request :avail_kernels
       request :avail_linodeplans
+      request :avail_nodebalancers
       request :avail_stackscripts
       request :linode_disk_create
       request :linode_disk_list
       request :linode_disk_delete
+      request :linode_disk_resize
+      request :linode_disk_update
+      request :linode_disk_imagize
+      request :linode_disk_duplicate
       request :linode_disk_createfromdistribution
       request :linode_disk_createfromstackscript
+      request :linode_disk_createfromimage
+      request :image_list
+      request :image_delete
       request :linode_ip_list
       request :linode_ip_addprivate
       request :linode_config_list

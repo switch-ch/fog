@@ -15,6 +15,7 @@ Shindo.tests("Compute::VcloudDirector | vms", ['vclouddirector', 'all']) do
     tests("#id").returns(String){ vm.id.class }
     tests("#name").returns(String){ vm.name.class }
     tests("#href").returns(String){ vm.href.class }
+    tests("#deployed").returns(String){ vm.deployed.class }
     tests("#type").returns("application/vnd.vmware.vcloud.vm+xml"){ vm.type }
     tests("#vapp_id").returns(String){ vm.vapp_id.class }
     tests("#status").returns(String){ vm.status.class }
@@ -23,6 +24,7 @@ Shindo.tests("Compute::VcloudDirector | vms", ['vclouddirector', 'all']) do
     tests("#cpu").returns(Fixnum){ vm.cpu.class }
     tests("#memory").returns(Fixnum){ vm.memory.class }
     tests("#hard_disks").returns(Array){ vm.hard_disks.class }
+    tests("#network_adapters").returns(Array){ vm.network_adapters.class }
   end
 
   tests("Compute::VcloudDirector | vm", ['get']) do

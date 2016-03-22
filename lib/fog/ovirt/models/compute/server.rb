@@ -9,6 +9,7 @@ module Fog
         identity :id
 
         attribute :name
+        attribute :comment
         attribute :description
         attribute :profile
         attribute :display
@@ -27,6 +28,8 @@ module Fog
         attribute :raw
         attribute :quota
         attribute :ips
+        attribute :ha
+        attribute :ha_priority
 
         def ready?
           !(status =~ /down/i)
@@ -84,9 +87,41 @@ module Fog
           service.destroy_volume(id, attrs)
         end
 
+        def update_volume attrs
+          wait_for { stopped? } if attrs[:blocking]
+          service.update_volume(id, attrs)
+        end
+
+        def attach_volume(attrs)
+          wait_for { stopped? } if attrs[:blocking]
+          service.attach_volume(id, attrs)
+        end
+
+        def detach_volume(attrs)
+          wait_for { stopped? } if attrs[:blocking]
+          service.detach_volume(id, attrs)
+        end
+
+        def add_to_affinity_group(attrs)
+          wait_for { stopped? } if attrs[:blocking]
+          service.add_to_affinity_group(id, attrs)
+        end
+        
+        def remove_from_affinity_group(attrs)
+          wait_for { stopped? } if attrs[:blocking]
+          service.remove_from_affinity_group(id, attrs)
+        end
+
         def start(options = {})
           wait_for { !locked? } if options[:blocking]
           service.vm_action(:id =>id, :action => :start)
+          reload
+        end
+
+        def start_with_cloudinit(options = {})
+          wait_for { !locked? } if options[:blocking]
+          user_data = Hash[YAML.load(options[:user_data]).map{|a| [a.first.to_sym, a.last]}]
+          service.vm_start_with_cloudinit(:id =>id, :user_data =>user_data)
           reload
         end
 

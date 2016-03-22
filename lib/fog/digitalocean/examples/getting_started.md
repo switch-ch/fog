@@ -1,14 +1,10 @@
 # Getting started: the compute service
 
-You'll need a DigitalOcean account and API key to use this provider.
+You'll need a DigitalOcean account and an API token to use this provider.
 
-Get one from http://www.digitalocean.com.
+Get one from https://cloud.digitalocean.com/settings/tokens/new
 
-To generate the API key, login to the DigitalOcean web panel and go to
-'My Settings -> API Access -> Generate a new API key'.
-
-Write down the Client Key and API Key, you'll need both to use the service.
-
+Write down the Access Token.
 
 ## Connecting, retrieving and managing server objects
 
@@ -24,11 +20,39 @@ require 'fog'
 
 docean = Fog::Compute.new({
   :provider => 'DigitalOcean',
-  :digitalocean_api_key   => 'poiuweoruwoeiuroiwuer', # your API key here
-  :digitalocean_client_id => 'lkjasoidfuoiu'          # your client key here
+  :version  => 'V2',
+  :digitalocean_token   => 'poiuweoruwoeiuroiwuer', # your Access Token here
 })
 ```
 
+## SSH Key Management
+
+Access to DigitalOcean servers can be managed with SSH keys. These can be assigned to servers at creation time so you can access them without having to use a password.
+
+Creating a key:
+
+```ruby
+docean.ssh_keys.create(
+  :name        => 'Default SSH Key',
+  :ssh_pub_key => File.read('~/.ssh/id_rsa.pub'))
+)
+```
+
+Listing all keys:
+
+```ruby
+docean.ssh_keys.each do | key |
+  puts key.name
+  puts key.public_key
+  puts key.id
+end
+```
+
+Destroying a key:
+
+```ruby
+docean.ssh_keys.destroy(:id => '27100')
+```
 ## Listing servers
 
 Listing servers and attributes:
@@ -36,13 +60,12 @@ Listing servers and attributes:
 ```ruby
 docean.servers.each do |server|
   # remember, servers are droplets
-  server.id
-  server.name
-  server.state
-  server.backups_enabled
-  server.image_id
-  server.flavor_id # server 'size' in DigitalOcean's API parlance
-  server.region_id
+  puts server.id
+  puts server.name
+  puts server.status
+  puts (server.image['slug'] || server.image['name']) # slug is only for public images, private images use name
+  puts server.size['slug']
+  puts server.region['slug']
 end
 ```
 
@@ -52,12 +75,12 @@ Creating a new server (droplet):
 
 ```ruby
 server = docean.servers.create :name => 'foobar',
-                               # use the first image listed
-                               :image_id  => docean.images.first.id,
-                               # use the first flavor listed
-                               :flavor_id => docean.flavors.first.id,
+                               # use the last image listed
+                               :image  => docean.images.last.id,
+                               # use the first flavor (aka size) listed
+                               :size => docean.flavors.first.slug,
                                # use the first region listed
-                               :region_id => docean.regions.first.id
+                               :region => docean.regions.first.slug
 ```
 
 The server is automatically started after that.
@@ -67,21 +90,18 @@ but you can easily list them too, and then decide:
 
 ```ruby
 docean.images.each do |image|
-  image.id
-  image.name
-  image.distribution
+  puts image.id
+  puts image.name
+  puts image.distribution
 end
 
 docean.flavors.each do |flavor|
-  flavor.id
-  flavor.name
+  puts flavor.slug
 end
 
 docean.regions.each do |region|
-  region.id
-  region.name
+  puts region.slug
 end
-
 ```
 
 Rebooting a server:
@@ -102,5 +122,3 @@ Destroying the server:
 ```ruby
 server.destroy
 ```
-
-

@@ -1,6 +1,5 @@
 require 'fog/joyent/core'
 require 'fog/joyent/errors'
-require 'net/ssh'
 
 module Fog
   module Compute
@@ -126,6 +125,12 @@ module Fog
           end
 
           if options[:joyent_keyname]
+            begin
+              require "net/ssh"
+            rescue LoadError
+              Fog::Logger.warning("'net/ssh' missing, please install and try again.")
+              exit(1)
+            end
             @joyent_keyname = options[:joyent_keyname]
             @joyent_keyphrase = options[:joyent_keyphrase]
             @key_manager = Net::SSH::Authentication::KeyManager.new(nil, {
@@ -247,6 +252,8 @@ module Fog
 
         def raise_if_error!(request, response)
           case response.status
+          when 400 then
+            raise Joyent::Errors::BadRequest.new('Bad Request', request, response)
           when 401 then
             raise Joyent::Errors::Unauthorized.new('Invalid credentials were used', request, response)
           when 403 then

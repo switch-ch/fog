@@ -6,50 +6,41 @@ fog is the Ruby cloud services library, top to bottom:
 * Requests allow power users to get the most out of the features of each individual cloud.
 * Mocks make testing and integrating a breeze.
 
-[![Build Status](https://secure.travis-ci.org/fog/fog.png?branch=master)](http://travis-ci.org/fog/fog)
-[![Dependency Status](https://gemnasium.com/fog/fog.png)](https://gemnasium.com/fog/fog)
-[![Code Climate](https://codeclimate.com/github/fog/fog.png)](https://codeclimate.com/github/fog/fog)
-[![Gem Version](https://fury-badge.herokuapp.com/rb/fog.png)](http://badge.fury.io/rb/fog)
-[![Gittip](http://img.shields.io/gittip/geemus.png)](https://www.gittip.com/geemus/)
+[![Build Status](https://secure.travis-ci.org/fog/fog.svg?branch=master)](http://travis-ci.org/fog/fog)
+[![Dependency Status](https://gemnasium.com/fog/fog.svg)](https://gemnasium.com/fog/fog)
+[![Code Climate](https://codeclimate.com/github/fog/fog/badges/gpa.svg)](https://codeclimate.com/github/fog/fog)
+[![Gem Version](https://badge.fury.io/rb/fog.svg)](http://badge.fury.io/rb/fog)
 
 ## Getting Started
 
-    sudo gem install fog
-
-Now type `fog` to try stuff, confident that fog will let you know what to do.
+The easiest way to learn fog is to install the gem and use the interactive console.
 Here is an example of wading through server creation for Amazon Elastic Compute Cloud:
 
-    >> server = Compute[:aws].servers.create
-    ArgumentError: image_id is required for this operation
+```
+$ sudo gem install fog
+[...]
 
-    >> server = Compute[:aws].servers.create(:image_id => 'ami-5ee70037')
-    <Fog::AWS::EC2::Server [...]>
+$ fog
 
-    >> server.destroy # cleanup after yourself or regret it, trust me
-    true
+  Welcome to fog interactive!
+  :default provides [...]
 
-## Ruby 1.8.7
+>> server = Compute[:aws].servers.create
+ArgumentError: image_id is required for this operation
 
-The maintainers of this project, in concert with the maintainers of Ruby,
-**strongly** recommend using the latest patchlevel of Ruby 1.9.2 or later.
-[As of July 1, 2013, Ruby 1.8.7 is no longer officially maintained.][retired]
-This means fixes will no longer be provided, even for known security
-vulnerabilities.
+>> server = Compute[:aws].servers.create(:image_id => 'ami-5ee70037')
+<Fog::AWS::EC2::Server [...]>
 
-[retired]: http://www.ruby-lang.org/en/news/2013/06/30/we-retire-1-8-7/
-
-With this caveat, if you wish to bundle `fog` into your application on Ruby
-1.8.7, you must add the following line to your `Gemfile`.
-
-```ruby
-gem 'nokogiri', '~>1.5.0'
+>> server.destroy # cleanup after yourself or regret it, trust me
+true
 ```
 
-Also, ensure that you are using LibXML version 2.8.0, since there is an
-[issue with LibXML version 2.9.0][issue829] ([and 2.9.1][issue904]).
+## Ruby version
 
-[issue829]: https://github.com/sparklemotion/nokogiri/issues/829
-[issue904]: https://github.com/sparklemotion/nokogiri/issues/904
+Fog requires Ruby `2.0.0` or later.
+
+Ruby `1.8` and `1.9` support was dropped in `fog-v2.0.0` as a backwards incompatible
+change. Please use the later fog `1.x` versions if you require `1.8.7` or `1.9.x` support.
 
 ## Collections
 
@@ -70,7 +61,7 @@ Collections share basic CRUD type operations, such as:
 
 * `all` - fetch every object of that type from the provider.
 * `create` - initialize a new record locally and a remote resource with the provider.
-* `get` - fetch a single object by it's identity from the provider.
+* `get` - fetch a single object by its identity from the provider.
 * `new` - initialize a new record locally, but do not create a remote resource with the provider.
 
 As an example, we'll try initializing and persisting a Rackspace Cloud server:
@@ -103,9 +94,9 @@ Many of the collection methods return individual objects, which also provide com
 
 ## Mocks
 
-As you might imagine, testing code using Fog can be slow and expensive, constantly turning on and and shutting down instances.
-Mocking allows skipping this overhead by providing an in memory representation resources as you make requests.
-Enabling mocking easy to use, before you run other commands, simply run:
+As you might imagine, testing code using Fog can be slow and expensive, constantly turning on and shutting down instances.
+Mocking allows skipping this overhead by providing an in memory representation of resources as you make requests.
+Enabling mocking is easy to use: before you run other commands, simply run:
 
 ```ruby
 Fog.mock!
